@@ -3,10 +3,9 @@ package ar.edu.unahur.obj2.caralibro
 import kotlin.math.ceil
 
 abstract class Publicacion {
-//  val permisos = listOf<String>("publico", "amigos", "privado", "excluidos")
   var cantidadMeGusta = 0
   var usuariosMeGusta = mutableListOf<Usuario>()
-//  var permiso = String()
+//  val permisos = listOf<String>("publico", "amigos", "privado", "excluidos")
 
   abstract fun espacioQueOcupa(): Int
 
@@ -44,3 +43,4 @@ class Video(val duracion: Int, var calidad: String ) : Publicacion() {
     calidad = calidadNueva
   }
 }
+

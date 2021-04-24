@@ -1,16 +1,19 @@
 package ar.edu.unahur.obj2.caralibro
 
 import io.kotest.core.spec.style.DescribeSpec
+import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 
 class UsuarioTest : DescribeSpec({
   describe("Caralibro") {
     val saludoCumpleanios = Texto("Felicidades Pepito, que los cumplas muy feliz")
     val fotoEnCuzco = Foto(768, 1024)
-    val videoASD = Video(100, "SD")
-    val videoA720 = Video(100, "HD720p")
-    val videoA1080 = Video(100, "HD1080p")
+    val videoJSD = Video(100, "SD")
+    val videoJ720 = Video(100, "HD720p")
+    val videoJ1080 = Video(100, "HD1080p")
+    val videoP720 = Video(200, "HD720p")
     val juana = Usuario()
+    val pancho = Usuario()
 
 
     describe("Una publicación") {
@@ -28,9 +31,9 @@ class UsuarioTest : DescribeSpec({
 
       describe("de tipo video") {
         it("ocupa, SD duracion, 720 duracion *3, 1080 duracion *6") {
-          videoASD.espacioQueOcupa().shouldBe(100)
-          videoA720.espacioQueOcupa().shouldBe(300)
-          videoA1080.espacioQueOcupa().shouldBe(600)
+          videoJSD.espacioQueOcupa().shouldBe(100)
+          videoJ720.espacioQueOcupa().shouldBe(300)
+          videoJ1080.espacioQueOcupa().shouldBe(600)
         }
       }
     }
@@ -41,15 +44,31 @@ class UsuarioTest : DescribeSpec({
         juana.agregarPublicacion(fotoEnCuzco)
         juana.agregarPublicacion(saludoCumpleanios)
 //      juana.espacioDePublicaciones().shouldBe(550548)
-        juana.agregarPublicacion((videoASD))
+        juana.agregarPublicacion((videoJSD))
         juana.espacioDePublicaciones().shouldBe(550648)
       }
 
       it("puede cambiar la calidad de video") {
-        juana.agregarPublicacion(videoA720)
-        videoA720.cambiarCalidad("HD1080p")
+        juana.agregarPublicacion(videoJ720)
+        videoJ720.cambiarCalidad("HD1080p")
         juana.espacioDePublicaciones().shouldBe(600)
       }
+
+      it("puede agregar amigo") {
+          juana.agregarAmigo(pancho)
+          juana.amigos.shouldContain(pancho)
+      }
     }
+
+    describe("me gusta") {
+        juana.agregarPublicacion((videoJSD))
+        pancho.darMeGusta(videoJSD)
+        it("puede dar me gusta") {
+            videoJSD.cantidadMeGusta.shouldBe(1)
+            videoJSD.usuariosMeGusta.shouldContain(pancho)
+            pancho.publicacionesMeGustan.shouldContain(videoJSD)
+        }
+    }
+
   }
 })

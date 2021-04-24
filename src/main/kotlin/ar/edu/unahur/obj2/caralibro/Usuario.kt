@@ -11,13 +11,18 @@ class Usuario {
 
   fun espacioDePublicaciones() = publicaciones.sumBy { it.espacioQueOcupa() }
 
-
 // revisar
   fun darMeGusta(publicacion: Publicacion) {
     if (!publicacionesMeGustan.contains(publicacion)) {
       publicacion.meGusta()
       publicacion.agregarUsuario(this)
       publicacionesMeGustan.add(publicacion)
+    }
+  }
+
+  fun agregarAmigo(usuario: Usuario) {
+    if (!amigos.contains(usuario)) {
+      amigos.add(usuario)
     }
   }
 }
