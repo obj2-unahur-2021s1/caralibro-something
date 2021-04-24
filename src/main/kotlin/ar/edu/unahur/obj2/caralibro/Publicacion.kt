@@ -3,15 +3,18 @@ package ar.edu.unahur.obj2.caralibro
 import kotlin.math.ceil
 
 abstract class Publicacion {
+//  val permisos = listOf<String>("publico", "amigos", "privado", "excluidos")
   var cantidadMeGusta = 0
   var usuariosMeGusta = mutableListOf<Usuario>()
-//  var permiso =
+//  var permiso = String()
 
   abstract fun espacioQueOcupa(): Int
 
   fun meGusta() = cantidadMeGusta ++
 
   fun agregarUsuario(usuario: Usuario) = usuariosMeGusta.add(usuario)
+
+
 }
 
 class Foto(val alto: Int, val ancho: Int) : Publicacion() {
