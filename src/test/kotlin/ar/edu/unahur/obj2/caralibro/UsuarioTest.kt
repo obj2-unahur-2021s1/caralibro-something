@@ -5,6 +5,7 @@ import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.collections.shouldContain
+import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import java.lang.Exception
 
@@ -110,9 +111,43 @@ class UsuarioTest : DescribeSpec({
 
         describe("Permisos") {
             timon.agregarPublicacion(videoJ1080)
-            it("puede cambiar el permiso a amigos") {
-                timon.cambiarAAmigos(videoJ1080)
+            timon.agregarPublicacion(videoJ720)
+            timon.agregarPublicacion(videoJSD)
+            timon.cambiarAAmigos(videoJ1080)
+            timon.agregarAmigo(pancho)
+            val permitidos = listOf<Usuario>(pancho)
+            timon.cambiarAPrivadoConPermitidos(videoJ720, permitidos)
+            timon.cambiarAPublicoConExcluidos(videoJSD, permitidos)
+
+            it("puede cambiar el permiso a amigos y publico") {
                 videoJ1080.permiso.shouldBe("amigos")
+                timon.cambiarAPublico(videoJ1080)
+                videoJ1080.permiso.shouldBe("publico")
+            }
+            it("puede ver cierta publicacion, privado con lista de permitidos") {
+                pancho.puedeVerPublicacion(timon, videoJ720).shouldBeTrue()
+            }
+            it("no puede ver, el usuario no esta en la lista de permitidos") {
+                juana.puedeVerPublicacion(timon, videoJ720).shouldBeFalse()
+            }
+            it("puede ver, permiso publico con excluidos") {
+                juana.puedeVerPublicacion(timon,videoJ720).shouldBeTrue()
+            }
+            it("no puede ver, el usuario esta en excluidos") {
+                pancho.puedeVerPublicacion(timon, videoJSD).shouldBeFalse()
+            }
+            it("puede ver todas las publicaciones de un usuario") {
+                timon.agregarAmigo(juana)
+                val permitido = listOf<Usuario>(juana)
+                timon.cambiarAPrivadoConPermitidos(videoJ720, permitido)
+                juana.puedeVerTodasLasPublicacionesDe(timon).shouldBeTrue()
+            }
+            it("no puede ver todas las publicaciones") {
+                pancho.puedeVerTodasLasPublicacionesDe(timon).shouldBeFalse()
+            }
+            it("mejores amigos") {
+                timon.agregarAmigo(juana)
+                timon.mejoresAmigos().shouldContainExactly(juana)
             }
         }
     }
