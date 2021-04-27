@@ -12,7 +12,7 @@ class Usuario {
 
   fun espacioDePublicaciones() = publicaciones.sumBy { it.espacioQueOcupa() }
 
-// revisar
+  // revisar
   fun darMeGusta(publicacion: Publicacion) {
     if (!publicacionesMeGustan.contains(publicacion)) {
       publicacion.meGusta()
@@ -35,11 +35,37 @@ class Usuario {
 
   fun soyMasAmistosoQue(usuario: Usuario) = this.totalAmigos() > usuario.totalAmigos()
 
+  fun puedeVerUnaPublicacionDe(usuario: Usuario, publicacion: Publicacion) = this.tienePermiso(usuario, publicacion)
+
+  fun tienePermiso(usuario: Usuario, publicacion: Publicacion): Boolean {
+    var resultado = false
+    if (publicacion.permiso == "publico") {
+      resultado = true
+    } else if (publicacion.permiso == "amigos" && usuario.esAmigoDe(this)) {
+      resultado = true
+    } else if (publicacion.permiso == "privado" && publicacion.permitidos.contains(usuario)) {
+      resultado = true
+    } else if (publicacion.permiso == "excluidos" && !publicacion.excluidos.contains(usuario)) {
+      resultado = true
+    }
+    return resultado
+  }
+
+  fun mejoresAmigosDe(usuario: Usuario) = amigos.filter {it.puedeVerTodasLasPublicacionesDe(usuario)}
+  /*En está función tenía pensado hacer un filtro de la lista de amigos de un Usuario que sólo contenga los amigos
+  del Usuario en cuestión que pueden ver todas las publicaciones de él*/
+
+  fun puedeVerTodasLasPublicacionesDe(usuario: Usuario) : Boolean {
+    usuario.publicaciones.forEach(puedeVerUnaPublicacionDe())
+  }
+  /*Y acá habría que retornar un booleano para aplicarlo en la función mejoresAmigosDe(), entonces se usa ese booleano
+  para configurar el filtro*/
+
   fun amigoMasPopular() = this.amigos.maxByOrNull { it.totalAmigos() }
 
-/////////////////////////////////
-//  PERMISOS  ///////////////////
-/////////////////////////////////
+  fun meStalkea(usuario: Usuario) =
+    this.publicaciones.count { it.usuariosMeGusta.contains(usuario) } > (publicaciones.size * 0.9)
+
   fun cambiarAPublico(publicacion: Publicacion) {
     publicacion.permiso = "publico"
   }
@@ -60,10 +86,4 @@ class Usuario {
     publicacion.excluidos.addAll(listaDeExcluidos)
   }
 
-  fun meStalkea(usuario: Usuario) =
-    this.publicaciones.count {it.usuariosMeGusta.contains(usuario)} > (publicaciones.size * 0.9)
-
 }
-
-
-
