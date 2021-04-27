@@ -16,7 +16,6 @@ class UsuarioTest : DescribeSpec({
         val videoJSD = Video(100, "SD")
         val videoJ720 = Video(100, "HD720p")
         val videoJ1080 = Video(100, "HD1080p")
-        val videoP720 = Video(200, "HD720p")
         val juana = Usuario()
         val pancho = Usuario()
         val timon = Usuario()
@@ -46,10 +45,8 @@ class UsuarioTest : DescribeSpec({
 
         describe("Un usuario") {
             it("puede calcular el espacio que ocupan sus publicaciones") {
-//        val juana = Usuario()
                 juana.agregarPublicacion(fotoEnCuzco)
                 juana.agregarPublicacion(saludoCumpleanios)
-//      juana.espacioDePublicaciones().shouldBe(550548)
                 juana.agregarPublicacion((videoJSD))
                 juana.espacioDePublicaciones().shouldBe(550648)
             }
@@ -131,7 +128,7 @@ class UsuarioTest : DescribeSpec({
                 juana.puedeVerPublicacion(timon, videoJ720).shouldBeFalse()
             }
             it("puede ver, permiso publico con excluidos") {
-                juana.puedeVerPublicacion(timon,videoJ720).shouldBeTrue()
+                juana.puedeVerPublicacion(timon,videoJSD).shouldBeTrue()
             }
             it("no puede ver, el usuario esta en excluidos") {
                 pancho.puedeVerPublicacion(timon, videoJSD).shouldBeFalse()

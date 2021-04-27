@@ -1,6 +1,5 @@
 package ar.edu.unahur.obj2.caralibro
 
-import java.lang.Exception
 import kotlin.math.ceil
 import kotlin.Exception as Exception1
 
@@ -10,7 +9,6 @@ abstract class Publicacion {
   var permiso = "publico"
   var permitidos = mutableListOf<Usuario>()
   var excluidos = mutableListOf<Usuario>()
-
 
   abstract fun espacioQueOcupa(): Int
 
@@ -30,7 +28,6 @@ class Texto(val contenido: String) : Publicacion() {
 }
 
 class Video(val duracion: Int, var calidad: String ) : Publicacion() {
-
 
   override fun espacioQueOcupa(): Int {
     var peso = duracion
